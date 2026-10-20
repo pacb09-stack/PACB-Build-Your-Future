@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mis objetivos | PACB</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<main class="hero">
+    <div class="brand">PACB<span>.</span></div>
+
+    <p class="eyebrow">CAREER DEVELOPMENT</p>
+
+    <h1>Mis objetivos</h1>
+
+    <p class="description">
+        Cada pequeño avance te acerca a tu próximo objetivo profesional.
+    </p>
+
+    <section class="about">
+        <h2>Crear un objetivo</h2>
+
+        <form th:action="@{/goals}" th:object="${goal}" method="post">
+
+            <label for="title">Título</label>
+            <input id="title"
+                   type="text"
+                   th:field="*{title}"
+                   maxlength="150"
+                   placeholder="Ej. Aprender Spring Boot"
+                   required>
+
+            <label for="description">Descripción</label>
+            <textarea id="description"
+                      th:field="*{description}"
+                      maxlength="1000"
+                      placeholder="¿Qué quieres conseguir?"></textarea>
+
+            <label for="targetDate">Fecha objetivo</label>
+            <input id="targetDate"
+                   type="date"
+                   th:field="*{targetDate}">
+
+            <button class="primary-button" type="submit">
+                Crear objetivo
+            </button>
+        </form>
+    </section>
+
+    <section class="about">
+        <h2>Mi lista</h2>
+
+        <p th:if="${#lists.isEmpty(goals)}">
+            Todavía no tienes objetivos.
+            Crea el primero para comenzar.
+        </p>
+
+        <article th:each="item : ${goals}"
+                 class="goal-card">
+
+            <div class="goal-heading">
+                <h3 th:text="${item.title}">Objetivo</h3>
+
+                <span th:if="${item.completed}" class="status">
+                    Completado
+                </span>
+
+                <span th:unless="${item.completed}" class="status">
+                    En progreso
+                </span>
+            </div>
+
+            <p th:if="${item.description != null
+                        and !item.description.isBlank()}"
+               th:text="${item.description}">
+                Descripción
+            </p>
+
+            <p th:if="${item.targetDate != null}"
+               class="muted"
+               th:text="|Fecha objetivo: ${item.targetDate}|">
+                Fecha objetivo
+            </p>
+        </article>
+    </section>
+
+    <a href="/" class="back-link">Volver al inicio</a>
+</main>
+
+</body>
+</html>
